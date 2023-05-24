@@ -1,23 +1,21 @@
 import { Button, Divider, Form, Input, message, notification } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
-import { callLogin } from '../../services/api';
-import './login.scss';
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { callRegister } from '../../services/api';
+import './register.scss';
 
-
-const LoginPage = () => {
-    const navigate = useNavigate();
+const RegisterPage = () => {
+    const naviagate = useNavigate();//điều hướng đến đường dẫn /...
     const [isSubmit, setIsSubmit] = useState(false);
 
-    const onFinish = async (values) => {
-        const { username, password } = values;
+    const onFinish = async (value) => {
+        const { fullName, email, password, phone } = value;
         setIsSubmit(true);
-        const res = await callLogin(username, password);
+        const res = await callRegister(fullName, email, password, phone);
         setIsSubmit(false);
-        if (res?.data) {
-            localStorage.setItem('access_token', res.data.access_token);
-            message.success('Đăng nhập tài khoản thành công!');
-            navigate('/')
+        if (res?.data?._id) {
+            message.success('Đăng kí tài khoản thành công !');
+            naviagate('/login')
         } else {
             notification.error({
                 message: "Có lỗi xảy ra",
@@ -28,27 +26,34 @@ const LoginPage = () => {
         }
     };
 
-
     return (
-        <div className="login-page">
-            <main className="main">
+        <div className="register-page">
+            <main className='main'>
                 <div className="container">
-                    <section className="wrapper">
+                    <section className='wrapper'>
                         <div className="heading">
-                            <h2 className="text text-large">Đăng Nhập</h2>
+                            <h2 className='text text-large'>Đăng Kí Tài Khoản</h2>
                             <Divider />
-
                         </div>
                         <Form
-                            name="basic"
-                            // style={{ maxWidth: 600, margin: '0 auto' }}
+                            name='basic'
                             onFinish={onFinish}
-                            autoComplete="off"
+                            autoComplete='off'
                         >
                             <Form.Item
                                 labelCol={{ span: 24 }} //whole column
+                                label="Họ tên"
+                                name="fullName"
+                                rules={[{ required: true, message: 'Họ tên không được để trống!' }]}
+                            >
+                                <Input />
+                            </Form.Item>
+
+
+                            <Form.Item
+                                labelCol={{ span: 24 }} //whole column
                                 label="Email"
-                                name="username"
+                                name="email"
                                 rules={[{ required: true, message: 'Email không được để trống!' }]}
                             >
                                 <Input />
@@ -62,18 +67,26 @@ const LoginPage = () => {
                             >
                                 <Input.Password />
                             </Form.Item>
+                            <Form.Item
+                                labelCol={{ span: 24 }} //whole column
+                                label="Số điện thoại"
+                                name="phone"
+                                rules={[{ required: true, message: 'Số điện thoại không được để trống!' }]}
+                            >
+                                <Input />
+                            </Form.Item>
 
                             <Form.Item
                             // wrapperCol={{ offset: 6, span: 16 }}
                             >
                                 <Button type="primary" htmlType="submit" loading={isSubmit}>
-                                    Đăng nhập
+                                    Đăng ký
                                 </Button>
                             </Form.Item>
                             <Divider>Or</Divider>
-                            <p className="text text-normal">Chưa có tài khoản ?
+                            <p className="text text-normal">Đã có tài khoản ?
                                 <span>
-                                    <Link to='/register' > Đăng Ký </Link>
+                                    <Link to='/login' > Đăng Nhập </Link>
                                 </span>
                             </p>
                         </Form>
@@ -84,4 +97,4 @@ const LoginPage = () => {
     )
 }
 
-export default LoginPage;
+export default RegisterPage;
