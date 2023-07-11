@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { callLogout } from '../../services/api';
 import { doLogoutAction } from '../../redux/account/accountSlice';
 
+
 const { Content, Footer, Sider } = Layout;
 
 const items = [
@@ -131,7 +132,7 @@ const LayoutAdmin = () => {
                     <Outlet />
                 </Content>
                 <Footer style={{ padding: 0 }}>
-                    React Test Fresher &copy; Hỏi Dân IT - Made with <HeartTwoTone />
+                    React Test Fresher &copy; TuanAnh DEVIT - Made with <HeartTwoTone />
                 </Footer>
             </Layout>
         </Layout>

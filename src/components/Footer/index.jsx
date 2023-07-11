@@ -1,8 +1,10 @@
+import './footer.scss';
+
 const Footer = () => {
     return (
-        <>
-            footer
-        </>
+        <footer>
+            <div>Khóa Học React Test Fresher &copy; by Hỏi Dân IT</div>
+        </footer>
     )
 }
 
