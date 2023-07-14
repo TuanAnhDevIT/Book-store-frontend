@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Col, Form, Input, Row, theme } from 'antd';
 
-const AdvancedSearchForm = () => {
+const InputSearch = (props) => {
     const { token } = theme.useToken();
     const [form] = Form.useForm();
 
@@ -13,7 +13,20 @@ const AdvancedSearchForm = () => {
     };
 
     const onFinish = (values) => {
-        console.log('Received values of form: ', values);
+        let query = "";
+        //build query
+        if (values.fullName) {
+            query += `&fullName=/${values.fullName}/i`
+        }
+        if (values.email) {
+            query += `&email=/${values.email}/i`
+        }
+        if (values.phone) {
+            query += `&phone=/${values.phone}/i`
+        }
+        if (query) {
+            props.handleSearch(query);
+        }
     };
 
     return (
@@ -25,7 +38,7 @@ const AdvancedSearchForm = () => {
                         name={`fullName`}
                         label={`Name`}
                     >
-                        <Input placeholder="placeholder" />
+                        <Input />
                     </Form.Item>
                 </Col>
                 <Col span={8}>
@@ -34,7 +47,7 @@ const AdvancedSearchForm = () => {
                         name={`email`}
                         label={`Email`}
                     >
-                        <Input placeholder="placeholder" />
+                        <Input />
                     </Form.Item>
                 </Col>
 
@@ -44,7 +57,7 @@ const AdvancedSearchForm = () => {
                         name={`phone`}
                         label={`Số điện thoại`}
                     >
-                        <Input placeholder="placeholder" />
+                        <Input />
                     </Form.Item>
                 </Col>
             </Row>
@@ -57,6 +70,7 @@ const AdvancedSearchForm = () => {
                         style={{ margin: '0 8px' }}
                         onClick={() => {
                             form.resetFields();
+                            props.setFilter("");
                         }}
                     >
                         Clear
@@ -75,14 +89,5 @@ const AdvancedSearchForm = () => {
     );
 };
 
-// https://stackblitz.com/run?file=demo.tsx
-// https://ant.design/components/form
-const InputSearch = () => {
-    return (
-        <div>
-            <AdvancedSearchForm />
-        </div>
-    );
-};
 
 export default InputSearch;
