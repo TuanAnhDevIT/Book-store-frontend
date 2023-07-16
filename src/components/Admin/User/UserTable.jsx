@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Row, Col } from 'antd';
+import { Table, Row, Col, Popconfirm, message, notification, Button } from 'antd';
 import InputSearch from './InputSearch';
-import { callFetchListUser } from '../../../services/api';
+import { callFetchListUser, callDeleteUser } from '../../../services/api';
+import { CloudDownloadOutlined, DeleteTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import UserViewDetail from './UserViewDetail';
 // https://stackblitz.com/run?file=demo.tsx
 const UserTable = () => {
 
@@ -14,6 +16,9 @@ const UserTable = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [filter, setFilter] = useState("");
     const [sortQuery, setSortQuery] = useState("");
+
+    const [openViewDetail, setOpenViewDetail] = useState(false);
+    const [dataViewDetail, setDataViewDetail] = useState(null);
 
     useEffect(() => {
         fetchUser();
@@ -69,7 +74,16 @@ const UserTable = () => {
         {
             title: 'Id',
             dataIndex: '_id',
-
+            render: (text, record, index) => {
+                return (
+                    <a href='#' onClick={() => {
+                        setDataViewDetail(record);
+                        setOpenViewDetail(true);
+                    }}>
+                        {record._id}
+                    </a>
+                )
+            }
         },
         {
             title: 'Tên hiển thị',
@@ -89,8 +103,22 @@ const UserTable = () => {
         {
             title: 'Action',
             render: (text, record, index) => {
+                // return (
+                //     <><button>Delete</button></>
+                // )
                 return (
-                    <><button>Delete</button></>
+                    <Popconfirm
+                        placement="leftTop"
+                        title={"Xác nhận xóa user"}
+                        description={"Bạn có chắc chắn muốn xóa user này ?"}
+                        onConfirm={() => handleDeleteUser(record._id)}
+                        okText="Xác nhận"
+                        cancelText="Hủy"
+                    >
+                        <span style={{ cursor: "pointer" }}>
+                            <DeleteTwoTone twoToneColor="#ff4d4f" />
+                        </span>
+                    </Popconfirm>
                 )
             }
         }
@@ -111,6 +139,58 @@ const UserTable = () => {
         }
     };
 
+    const handleDeleteUser = async (userId) => {
+        const res = await callDeleteUser(userId);
+        if (res && res.data) {
+            message.success('Xóa user thành công');
+            fetchUser();
+        }
+        else {
+            notification.error({
+                message: "có lỗi xảy ra",
+                description: res.message
+            });
+        }
+    };
+
+    const renderHeader = () => {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span>Table List Users</span>
+                <span style={{ display: 'flex', gap: 15 }}>
+                    <Button
+                        icon={<ExportOutlined />}
+                        type="primary"
+                    >
+                        Export
+                    </Button>
+                    <Button
+                        icon={<CloudDownloadOutlined />}
+                        type="primary"
+                    >
+                        Import
+                    </Button>
+                    <Button
+                        icon={<PlusOutlined />}
+                        type="primary"
+                    // onClick={() => setOpenModalCreate(true)}
+                    >
+                        Thêm mới
+                    </Button>
+                    <Button
+                        type='ghost'
+                        onClick={() => {
+                            setFilter("");
+                            setSortQuery("")
+                        }}
+                    >
+                        <ReloadOutlined />
+                    </Button>
+                </span>
+            </div>
+        )
+    }
+
     const handleSearch = (query) => {
         setFilter(query);
     }
@@ -125,7 +205,7 @@ const UserTable = () => {
                 </Col>
                 <Col span={24}>
                     <Table
-                        // title={renderHeader}
+                        title={renderHeader}
                         loading={isLoading}
                         columns={columns}
                         dataSource={listUser}
@@ -142,6 +222,16 @@ const UserTable = () => {
                     />
                 </Col>
             </Row>
+            {/* <UserModalCreate
+                openModalCreate={openModalCreate}
+                setOpenModalCreate={setOpenModalCreate}
+            /> */}
+            <UserViewDetail
+                openViewDetail={openViewDetail}
+                setOpenViewDetail={setOpenViewDetail}
+                dataViewDetail={dataViewDetail}
+                setDataViewDetail={setDataViewDetail}
+            />
         </>
     )
 }
