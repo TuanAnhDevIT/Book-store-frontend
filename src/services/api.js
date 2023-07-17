@@ -23,3 +23,11 @@ export const callFetchListUser = (query) => {
 export const callDeleteUser = (userId) => {
     return axios.delete(`api/v1/user/${userId}`)
 }
+
+// export const callDeleteUser = (id) => {
+//     return axios.delete(`api/v1/user/${id}`)
+// }
+
+export const callCreateAUser = (fullName, email, password, phone) => {
+    return axios.post('/api/v1/user', { fullName, email, password, phone })
+}

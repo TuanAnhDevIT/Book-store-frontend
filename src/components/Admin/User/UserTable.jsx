@@ -4,6 +4,7 @@ import InputSearch from './InputSearch';
 import { callFetchListUser, callDeleteUser } from '../../../services/api';
 import { CloudDownloadOutlined, DeleteTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import UserViewDetail from './UserViewDetail';
+import UserModalCreate from './UserModalCreate';
 // https://stackblitz.com/run?file=demo.tsx
 const UserTable = () => {
 
@@ -17,8 +18,11 @@ const UserTable = () => {
     const [filter, setFilter] = useState("");
     const [sortQuery, setSortQuery] = useState("");
 
+    const [openModalCreate, setOpenModalCreate] = useState(false);
+
     const [openViewDetail, setOpenViewDetail] = useState(false);
     const [dataViewDetail, setDataViewDetail] = useState(null);
+
 
     useEffect(() => {
         fetchUser();
@@ -173,7 +177,7 @@ const UserTable = () => {
                     <Button
                         icon={<PlusOutlined />}
                         type="primary"
-                    // onClick={() => setOpenModalCreate(true)}
+                        onClick={() => setOpenModalCreate(true)}
                     >
                         Thêm mới
                     </Button>
@@ -196,6 +200,7 @@ const UserTable = () => {
     }
     return (
         <>
+            {/* <div style={{ padding: 10 }}> */}
             <Row gutter={[20, 20]}>
                 <Col span={24}>
                     <InputSearch
@@ -216,22 +221,24 @@ const UserTable = () => {
                                 current: current,
                                 pageSize: pageSize,
                                 showSizeChanger: true,
-                                total: total
+                                total: total,
+                                showTotal: (total, range) => { return (<div>{range[0]}-{range[1]} trên {total} row </div>) }
                             }
                         }
                     />
                 </Col>
             </Row>
-            {/* <UserModalCreate
+            <UserModalCreate
                 openModalCreate={openModalCreate}
                 setOpenModalCreate={setOpenModalCreate}
-            /> */}
+            />
             <UserViewDetail
                 openViewDetail={openViewDetail}
                 setOpenViewDetail={setOpenViewDetail}
                 dataViewDetail={dataViewDetail}
                 setDataViewDetail={setDataViewDetail}
             />
+            {/* </div> */}
         </>
     )
 }
