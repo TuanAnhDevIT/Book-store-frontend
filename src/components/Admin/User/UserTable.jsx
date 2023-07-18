@@ -5,6 +5,7 @@ import { callFetchListUser, callDeleteUser } from '../../../services/api';
 import { CloudDownloadOutlined, DeleteTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import UserViewDetail from './UserViewDetail';
 import UserModalCreate from './UserModalCreate';
+import UserImport from './data/UserImport';
 // https://stackblitz.com/run?file=demo.tsx
 const UserTable = () => {
 
@@ -22,6 +23,9 @@ const UserTable = () => {
 
     const [openViewDetail, setOpenViewDetail] = useState(false);
     const [dataViewDetail, setDataViewDetail] = useState(null);
+
+    // const [setOpenModalImport, openModalImport] = useState(false);
+    const [openModalImport, setOpenModalImport] = useState(false);
 
 
     useEffect(() => {
@@ -171,6 +175,7 @@ const UserTable = () => {
                     <Button
                         icon={<CloudDownloadOutlined />}
                         type="primary"
+                        onClick={() => setOpenModalImport(true)}
                     >
                         Import
                     </Button>
@@ -237,6 +242,10 @@ const UserTable = () => {
                 setOpenViewDetail={setOpenViewDetail}
                 dataViewDetail={dataViewDetail}
                 setDataViewDetail={setDataViewDetail}
+            />
+            <UserImport
+                openModalImport={openModalImport}
+                setOpenModalImport={setOpenModalImport}
             />
             {/* </div> */}
         </>
