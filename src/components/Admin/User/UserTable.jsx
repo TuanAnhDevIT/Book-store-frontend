@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Table, Row, Col, Popconfirm, message, notification, Button } from 'antd';
 import InputSearch from './InputSearch';
 import { callFetchListUser, callDeleteUser } from '../../../services/api';
-import { CloudDownloadOutlined, DeleteTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import { CloudDownloadOutlined, DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import UserViewDetail from './UserViewDetail';
 import UserModalCreate from './UserModalCreate';
 import UserImport from './data/UserImport';
 import * as XLSX from 'xlsx';
+import { parseISO, format } from 'date-fns';
+import UserModalUpdate from './UserModalUpdate';
+
 // https://stackblitz.com/run?file=demo.tsx
 const UserTable = () => {
 
@@ -27,6 +30,9 @@ const UserTable = () => {
 
     // const [setOpenModalImport, openModalImport] = useState(false);
     const [openModalImport, setOpenModalImport] = useState(false);
+
+    const [openModalUpdate, setOpenModalUpdate] = useState(false);
+    const [dataUpdate, setDataUpdate] = useState(""); // tự thêm >>> check
 
 
     useEffect(() => {
@@ -110,24 +116,44 @@ const UserTable = () => {
             sorter: true
         },
         {
+            title: 'Ngày cập nhật',
+            dataIndex: 'updatedAt',
+            sorter: true,
+            render: (text, record) => {
+                const date = parseISO(record.updatedAt);
+                const formattedDate = format(date, 'dd/MM/yyyy HH:mm:ss'); // Định dạng ngày giờ theo ý muốn, ví dụ: 22/05/2023 06:22:09
+                return <span>{formattedDate}</span>;
+            },
+        },
+        {
             title: 'Action',
             render: (text, record, index) => {
                 // return (
                 //     <><button>Delete</button></>
                 // )
                 return (
-                    <Popconfirm
-                        placement="leftTop"
-                        title={"Xác nhận xóa user"}
-                        description={"Bạn có chắc chắn muốn xóa user này ?"}
-                        onConfirm={() => handleDeleteUser(record._id)}
-                        okText="Xác nhận"
-                        cancelText="Hủy"
-                    >
-                        <span style={{ cursor: "pointer" }}>
-                            <DeleteTwoTone twoToneColor="#ff4d4f" />
-                        </span>
-                    </Popconfirm>
+                    <>
+                        <Popconfirm
+                            placement="leftTop"
+                            title={"Xác nhận xóa user"}
+                            description={"Bạn có chắc chắn muốn xóa user này ?"}
+                            onConfirm={() => handleDeleteUser(record._id)}
+                            okText="Xác nhận"
+                            cancelText="Hủy"
+                        >
+                            <span style={{ cursor: "pointer" }}>
+                                <DeleteTwoTone twoToneColor="#ff4d4f" />
+                            </span>
+                        </Popconfirm>
+
+                        <EditTwoTone
+                            twoToneColor="#f57800" style={{ cursor: "pointer" }}
+                            onClick={() => {
+                                setOpenModalUpdate(true);
+                                setDataUpdate(record)
+                            }}
+                        />
+                    </>
                 )
             }
         }
@@ -259,6 +285,13 @@ const UserTable = () => {
             <UserImport
                 openModalImport={openModalImport}
                 setOpenModalImport={setOpenModalImport}
+            />
+            < UserModalUpdate
+                openModalUpdate={openModalUpdate}
+                setOpenModalUpdate={setOpenModalUpdate}
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
+                fetchUser={fetchUser}
             />
             {/* </div> */}
         </>

@@ -1,23 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, Form, Divider, Input, message, notification } from 'antd';
-import { callCreateAUser } from '../../../services/api';
+import { callUpdateUser } from '../../../services/api';
 
 
-const UserModalCreate = (props) => {
-    const { openModalCreate, setOpenModalCreate } = props;
+const UserModalUpdate = (props) => {
+    const { openModalUpdate, setOpenModalUpdate } = props;
+    const { dataUpdate, setDataUpdate } = props; // tự thêm >>> check
     const [isSubmit, setIsSubmit] = useState(false);
 
-    // https://ant.design/components/form#formuseform
     const [form] = Form.useForm();
 
     const onFinish = async (values) => {
-        const { fullName, password, email, phone } = values;
-        setIsSubmit(true);
-        const res = await callCreateAUser(fullName, email, password, phone);
-        if (res?.data?._id) {
-            message.success('Tạo mới user thành công !');
-            form.resetFields();
-            setOpenModalCreate(false);
+        const { _id, fullName, phone } = values;
+        setIsSubmit(true)
+        const res = await callUpdateUser(_id, fullName, phone);
+        if (res && res.data) {
+            message.success('Cập nhật user thành công !');
+            setOpenModalUpdate(false);
             await props.fetchUser()
         } else {
             notification.error({
@@ -28,14 +27,21 @@ const UserModalCreate = (props) => {
         setIsSubmit(false)
     };
 
+    useEffect(() => {
+        form.setFieldsValue(dataUpdate)
+    }, [dataUpdate])
+
     return (
         <>
             <Modal
-                title="Thêm mới người dùng"
-                open={openModalCreate}
+                title="Cập nhật người dùng"
+                open={openModalUpdate}
                 onOk={() => { form.submit() }}
-                onCancel={() => setOpenModalCreate(false)}
-                okText={"Tạo mới"}
+                onCancel={() => {
+                    setOpenModalUpdate(false);
+                    setDataUpdate(null)
+                }}
+                okText={"Cập nhật"}
                 cancelText={"Hủy"}
                 confirmLoading={isSubmit}
             >
@@ -47,7 +53,18 @@ const UserModalCreate = (props) => {
                     style={{ maxWidth: 600 }}
                     onFinish={onFinish}
                     autoComplete='off'
+                // initialValues={dataUpdate}
                 >
+                    <Form.Item
+                        hidden
+                        labelCol={{ span: 24 }} //whole column
+                        label="Id"
+                        name="_id"
+                        rules={[{ required: true, message: 'Vui lòng nhập Id!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+
                     <Form.Item
                         labelCol={{ span: 24 }} //whole column
                         label="Tên hiển thị"
@@ -64,17 +81,9 @@ const UserModalCreate = (props) => {
                         name="email"
                         rules={[{ required: true, message: 'Email không được để trống!' }]}
                     >
-                        <Input />
+                        <Input disabled />
                     </Form.Item>
 
-                    <Form.Item
-                        labelCol={{ span: 24 }} //whole column
-                        label="Mật khẩu"
-                        name="password"
-                        rules={[{ required: true, message: 'Mật khẩu không được để trống!' }]}
-                    >
-                        <Input.Password />
-                    </Form.Item>
                     <Form.Item
                         labelCol={{ span: 24 }} //whole column
                         label="Số điện thoại"
@@ -90,4 +99,4 @@ const UserModalCreate = (props) => {
     );
 };
 
-export default UserModalCreate;
+export default UserModalUpdate;
