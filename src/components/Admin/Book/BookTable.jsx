@@ -6,6 +6,9 @@ import { callFetchListBook, callDeleteBook } from '../../../services/api';
 import { DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import BookViewDetail from './BookViewDetail';
 import BookModalCreate from './BookModalCreate';
+import BookModalUpdate from './BookModalUpdate';
+import * as XLSX from 'xlsx';
+
 
 const BookTable = () => {
     const [listBook, setListBook] = useState([]);
@@ -20,6 +23,8 @@ const BookTable = () => {
 
     const [openModalCreate, setOpenModalCreate] = useState(false)
 
+    const [openModalUpdate, setOpenModalUpdate] = useState(false);
+    const [dataUpdate, setDataUpdate] = useState(null);
 
 
     useEffect(() => {
@@ -109,10 +114,10 @@ const BookTable = () => {
 
                         <EditTwoTone
                             twoToneColor="#f57800" style={{ cursor: "pointer" }}
-                        // onClick={() => {
-                        //     setOpenModalUpdate(true);
-                        //     setDataUpdate(record)
-                        // }}
+                            onClick={() => {
+                                setOpenModalUpdate(true);
+                                setDataUpdate(record)
+                            }}
                         />
                     </div>
                 )
@@ -136,6 +141,16 @@ const BookTable = () => {
         }
     };
 
+    const handleExportData = () => {
+        // https://stackoverflow.com/questions/70871254/how-can-i-export-a-json-object-to-excel-using-nextjs-react
+        if (listBook.length > 0) {
+            const worksheet = XLSX.utils.json_to_sheet(listBook);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+            XLSX.writeFile(workbook, "ExportBook.xlsx");
+        }
+    }
+
     const renderHeader = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -144,7 +159,7 @@ const BookTable = () => {
                     <Button
                         icon={<ExportOutlined />}
                         type="primary"
-                    // onClick={() => handleExportData()}
+                        onClick={() => handleExportData()}
                     >
                         Export
                     </Button>
@@ -173,11 +188,11 @@ const BookTable = () => {
         setFilter(query);
     }
 
-    const handleDeleteBook = async (bookId) => {
-        const res = await callDeleteBook(bookId);
+    const handleDeleteBook = async (_id) => {
+        const res = await callDeleteBook(_id);
         if (res && res.data) {
             message.success('Xóa book thành công');
-            fetchUser();
+            fetchBook();
         }
         else {
             notification.error({
@@ -226,6 +241,13 @@ const BookTable = () => {
                 <BookModalCreate
                     openModalCreate={openModalCreate}
                     setOpenModalCreate={setOpenModalCreate}
+                />
+                <BookModalUpdate
+                    openModalUpdate={openModalUpdate}
+                    setOpenModalUpdate={setOpenModalUpdate}
+                    dataUpdate={dataUpdate}
+                    setDataUpdate={setDataUpdate}
+                    fetchBook={fetchBook}
                 />
             </div>
         </>
