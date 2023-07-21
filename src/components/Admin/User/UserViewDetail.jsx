@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Badge, Button, Descriptions, Drawer, Radio, Space } from 'antd';
 import moment from 'moment';
 
-const UserViewDetail = ({ openViewDetail, setOpenViewDetail, dataViewDetail }) => {
+const UserViewDetail = ({ openViewDetail, setOpenViewDetail, dataViewDetail, setDataViewDetail }) => {
     const onClose = () => {
         setOpenViewDetail(false);
         setDataViewDetail(null);
