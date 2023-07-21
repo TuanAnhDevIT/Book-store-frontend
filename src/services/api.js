@@ -46,15 +46,25 @@ export const callFetchListBook = (query) => {
 }
 
 export const callDeleteBook = (bookId) => {
-    return axios.delete(`api/v1/user/${bookId}`)
+    return axios.delete(`api/v1/book/${bookId}`)
 }
 
 export const callCreateABook = (mainText, author, price, category, quantity, sold, thumbnail, slider) => {
-    return axios.post(`/api/v1/book`, { mainText, author, price, category, quantity, sold, thumbnail, slider })
+    return axios.post('/api/v1/book', { mainText, author, price, category, quantity, sold, thumbnail, slider })
 }
 
 export const callFetchCategory = (data) => {
-    return axios.get(`/api/v1/database/category`, data)
+    return axios.get('/api/v1/database/category', data)
+}
+
+export const callUploadBookImg = (fileImg) => {
+    const bodyFormData = new FormData(); bodyFormData.append('fileImg', fileImg); return axios({
+        method: 'post',
+        url: '/api/v1/file/upload', data: bodyFormData, headers: {
+            "Content-Type": "multipart/form-data",
+            "upload-type": "book"
+        },
+    });
 }
 
 // export const callUpdateBook = (_id, fullName, phone) => {

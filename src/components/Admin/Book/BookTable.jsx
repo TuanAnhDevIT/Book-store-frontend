@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Row, Col, Popconfirm, message, notification, Button } from 'antd';
 import InputSearchBook from './InputSearchBook';
 import { parseISO, format } from 'date-fns';
-import { callFetchListBook } from '../../../services/api';
+import { callFetchListBook, callDeleteBook } from '../../../services/api';
 import { DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import BookViewDetail from './BookViewDetail';
 import BookModalCreate from './BookModalCreate';

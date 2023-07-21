@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Col, Divider, Form, Input, InputNumber, message, Modal, notification, Row, Select, Upload } from 'antd';
-import { callCreateABook, callFetchCategory } from '../../../services/api';
+import { callCreateABook, callFetchCategory, callUploadBookImg } from '../../../services/api';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
 
 const BookModalCreate = (props) => {
@@ -14,6 +14,13 @@ const BookModalCreate = (props) => {
     const [loadingSlider, setLoadingSlider] = useState(false);
 
     const [imageUrl, setImageUrl] = useState("");
+
+    const [dataThumbnail, setDataThumbnail] = useState([])
+    const [dataSlider, setDataSlider] = useState([])
+
+    const [previewOpen, setPreviewOpen] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [previewTitle, setPreviewTitle] = useState('');
 
     useEffect(() => {
         const fetchCategory = async () => {
@@ -29,12 +36,37 @@ const BookModalCreate = (props) => {
     }, [])
 
     const onFinish = async (values) => {
-        const { mainText, author, price, category, quantity, sold, thumbnail, slider } = values;
+        // console.log(">>>Check values :", values);
+        // console.log(">>>Check data thumbnail :", thumbnail);
+        // console.log(">>>Check data slider :", slider);
+        // return;
+
+        if (dataThumbnail.length === 0) {
+            notification.error({
+                message: 'Lỗi validate',
+                description: 'Vui lòng upload ảnh thumbnail'
+            })
+            return;
+        }
+
+        if (dataSlider.length === 0) {
+            notification.error({
+                message: 'Lỗi validate',
+                description: 'Vui lòng upload ảnh slider'
+            })
+            return;
+        }
+
+        const { mainText, author, price, category, quantity, sold } = values;
+        const thumbnail = dataThumbnail[0].name;
+        const slider = dataSlider.map(item => item.name);
         setIsSubmit(true)
         const res = await callCreateABook(mainText, author, price, category, quantity, sold, thumbnail, slider);
         if (res && res.data) {
             message.success('Tạo mới book thành công');
             form.resetFields();
+            setDataSlider([]);
+            setDataThumbnail([]);
             setOpenModalCreate(false);
             await props.fetchBook()
         } else {
@@ -78,12 +110,52 @@ const BookModalCreate = (props) => {
         }
     };
 
-    const handleUploadFile = ({ file, onSuccess, onError }) => {
-        setTimeout(() => {
-            onSuccess("ok");
-        }, 1000);
+    const handleUploadFileThumbnail = async ({ file, onSuccess, onError }) => {
+        const res = await callUploadBookImg(file);
+        if (res && res.data) {
+            setDataThumbnail([{
+                name: res.data.fileUploaded,
+                uid: file.uid
+            }])
+            onSuccess('ok')
+        } else {
+            onError('Đã có lỗi khi upload file')
+        }
     };
 
+    //chia làm 2 hàm vì thumbnail chỉ có 1 ảnh mà thumnail có hơn 2 ảnh
+    const handleUploadFileSlider = async ({ file, onSuccess, onError }) => {
+        const res = await callUploadBookImg(file);
+        if (res && res.data) {
+            //copy previous state => upload multiple images
+            //GỌI API nhiều lần và lời gọi sau không ghi đè lên lời gọi trước
+            setDataSlider((dataSlider) => [...dataSlider, {
+                name: res.data.fileUploaded,
+                uid: file.uid
+            }])
+            onSuccess('ok')
+        } else {
+            onError('Đã có lỗi khi upload file')
+        }
+    };
+
+    const handleRemoveFile = (file, type) => {
+        if (type === 'thumbnail') {
+            setDataThumbnail([])
+        }
+        if (type === 'slider') {
+            const newSlider = dataSlider.filter(x => x.uid !== file.uid);
+            setDataSlider(newSlider);
+        }
+    };
+
+    const handlePreview = async (file) => {
+        getBase64(file.originFileObj, (url) => {
+            setPreviewOpen(true);
+            setPreviewImage(url);
+            setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
+        });
+    };
 
     return (
         <>
@@ -92,7 +164,10 @@ const BookModalCreate = (props) => {
                 title="Thêm mới book"
                 open={openModalCreate}
                 onOk={() => { form.submit() }}
-                onCancel={() => setOpenModalCreate(false)}
+                onCancel={() => {
+                    form.resetFields();
+                    setOpenModalCreate(false)
+                }}
                 okText={"Tạo mới"}
                 cancelText={"Hủy"}
                 confirmLoading={isSubmit}
@@ -193,9 +268,11 @@ const BookModalCreate = (props) => {
                                     className="avatar-uploader"
                                     maxCount={1}
                                     multiple={false}
-                                    customRequest={handleUploadFile}
+                                    customRequest={handleUploadFileThumbnail}
                                     beforeUpload={beforeUpload}
                                     onChange={handleChange}
+                                    onRemove={(file) => handleRemoveFile(file, "thumbnail")}
+                                    onPreview={handlePreview}
                                 >
                                     <div>
                                         {loading ? <LoadingOutlined /> : <PlusOutlined />}
@@ -216,9 +293,11 @@ const BookModalCreate = (props) => {
                                     name="slider"
                                     listType="picture-card"
                                     className="avatar-uploader"
-                                    customRequest={handleUploadFile}
+                                    customRequest={handleUploadFileSlider}
                                     beforeUpload={beforeUpload}
                                     onChange={(info) => handleChange(info, 'slider')}
+                                    onRemove={(file) => handleRemoveFile(file, "slider")}
+                                    onPreview={handlePreview}
                                 >
                                     <div>
                                         {loadingSlider ? <LoadingOutlined /> : <PlusOutlined />}
@@ -229,6 +308,9 @@ const BookModalCreate = (props) => {
                         </Col>
                     </Row>
                 </Form>
+            </Modal>
+            <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={() => setPreviewOpen(false)}>
+                <img alt="example" style={{ width: '100%' }} src={previewImage} />
             </Modal>
         </>
     );
