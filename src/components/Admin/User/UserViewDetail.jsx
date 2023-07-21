@@ -32,7 +32,7 @@ const UserViewDetail = ({ openViewDetail, setOpenViewDetail, dataViewDetail }) =
                         {moment(dataViewDetail?.createdAt).format('DD-MM-YYYY HH:mm:ss')}
                     </Descriptions.Item>
                     <Descriptions.Item label="Updated At">
-                        {moment(dataViewDetail?.updateddAt).format('DD-MM-YYYY HH:mm:ss')}
+                        {moment(dataViewDetail?.updatedAt).format('DD-MM-YYYY HH:mm:ss')}
                     </Descriptions.Item>
                 </Descriptions>
             </Drawer>

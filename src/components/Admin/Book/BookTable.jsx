@@ -1,49 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Row, Col, Popconfirm, message, notification, Button } from 'antd';
-import InputSearch from './InputSearch';
-import { callFetchListUser, callDeleteUser } from '../../../services/api';
-import { CloudDownloadOutlined, DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
-import UserViewDetail from './UserViewDetail';
-import UserModalCreate from './UserModalCreate';
-import UserImport from './data/UserImport';
-import * as XLSX from 'xlsx';
+import InputSearchBook from './InputSearchBook';
 import { parseISO, format } from 'date-fns';
-import UserModalUpdate from './UserModalUpdate';
+import { callFetchListBook } from '../../../services/api';
+import { DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
+import BookViewDetail from './BookViewDetail';
 
-// https://stackblitz.com/run?file=demo.tsx
-const UserTable = () => {
-
-    const [listUser, setListUser] = useState([]);
-    // sử dụng 'useState' để khai báo sate 'listUser' và hàm 'setListUser' để thay đổi giá trị của 'listUser' 
+const BookTable = () => {
+    const [listBook, setListBook] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const [current, setCurrent] = useState(1);
     const [pageSize, setPageSize] = useState(4);
-    const [total, setTotal] = useState(0);
-
-    const [isLoading, setIsLoading] = useState(false);
     const [filter, setFilter] = useState("");
-    const [sortQuery, setSortQuery] = useState("");
-
-    const [openModalCreate, setOpenModalCreate] = useState(false);
-
+    const [sortQuery, setSortQuery] = useState("sort = -updatedAt");
+    const [total, setTotal] = useState(0);
     const [openViewDetail, setOpenViewDetail] = useState(false);
     const [dataViewDetail, setDataViewDetail] = useState(null);
 
-    // const [setOpenModalImport, openModalImport] = useState(false);
-    const [openModalImport, setOpenModalImport] = useState(false);
-
-    const [openModalUpdate, setOpenModalUpdate] = useState(false);
-    const [dataUpdate, setDataUpdate] = useState(""); // tự thêm >>> check
 
 
     useEffect(() => {
-        fetchUser();
+        fetchBook();
     }, [current, pageSize, filter, sortQuery]);
-    //dependencies (tham số thứ hai trong []) là một mảng các giá trị mà hook sẽ theo dõi. 
-    //Khi các giá trị này thay đổi, callback function sẽ được gọi lại. 
-    //Nếu dependencies là một mảng rỗng [], callback function chỉ được gọi một lần 
-    //khi component được render lần đầu tiên.
 
-    const fetchUser = async () => {
+    const fetchBook = async () => {
         setIsLoading(true)
         let query = `current=${current}&pageSize=${pageSize}`;
 
@@ -54,33 +34,10 @@ const UserTable = () => {
             query += `&${sortQuery}`
         }
 
-        const res = await callFetchListUser(query);//`/api/v1/user?${query}`
+        const res = await callFetchListBook(query);
         if (res && res.data) {
-            setListUser(res.data.result);
-            // vd postman
-            // vd:"result": [
-            //     {
-            //         "_id": "646b0a150aaf0df4a5fafeeb",
-            //         "fullName": "I'm Admin",
-            //         "email": "admin@gmail.com",
-            //         "phone": "123456789",
-            //         "role": "ADMIN",
-            //         "avatar": "21232f297a57a5a743894a0e4a801fc3.png",
-            //         "isActive": true,
-            //         "createdAt": "2023-05-22T06:22:09.613Z",
-            //         "updatedAt": "2023-05-22T06:22:09.613Z",
-            //         "__v": 0
-            //     },
-            //     ....
-            // ]
+            setListBook(res.data.result);
             setTotal(res.data.meta.total)
-            // "data": {
-            //     "meta": {
-            //         "current": "1",
-            //         "pageSize": "2",
-            //         "pages": 10,
-            //         "total": 20
-            //     },
         }
         setIsLoading(false)
     }
@@ -101,18 +58,18 @@ const UserTable = () => {
             }
         },
         {
-            title: 'Tên hiển thị',
-            dataIndex: 'fullName',
+            title: 'Tên sách',
+            dataIndex: 'mainText',
             sorter: true,
         },
         {
-            title: 'Email',
-            dataIndex: 'email',
+            title: 'Thể loại',
+            dataIndex: 'category',
             sorter: true
         },
         {
-            title: 'Số điện thoại',
-            dataIndex: 'phone',
+            title: 'Tác giả',
+            dataIndex: 'author',
             sorter: true
         },
         {
@@ -127,6 +84,7 @@ const UserTable = () => {
         },
         {
             title: 'Action',
+            width: 100,
             render: (text, record, index) => {
                 // return (
                 //     <><button>Delete</button></>
@@ -135,9 +93,9 @@ const UserTable = () => {
                     <div style={{ display: "flex", justifyContent: "space-around" }}>
                         <Popconfirm
                             placement="leftTop"
-                            title={"Xác nhận xóa user"}
-                            description={"Bạn có chắc chắn muốn xóa user này ?"}
-                            onConfirm={() => handleDeleteUser(record._id)}
+                            title={"Xác nhận xóa book"}
+                            description={"Bạn có chắc chắn muốn xóa book này ?"}
+                            onConfirm={() => handleDeleteBook(record._id)}
                             okText="Xác nhận"
                             cancelText="Hủy"
                         >
@@ -148,16 +106,17 @@ const UserTable = () => {
 
                         <EditTwoTone
                             twoToneColor="#f57800" style={{ cursor: "pointer" }}
-                            onClick={() => {
-                                setOpenModalUpdate(true);
-                                setDataUpdate(record)
-                            }}
+                        // onClick={() => {
+                        //     setOpenModalUpdate(true);
+                        //     setDataUpdate(record)
+                        // }}
                         />
                     </div>
                 )
             }
         }
     ];
+
 
     const onChange = (pagination, filters, sorter, extra) => {
         if (pagination && pagination.current !== current) {
@@ -174,43 +133,22 @@ const UserTable = () => {
         }
     };
 
-    const handleDeleteUser = async (userId) => {
-        const res = await callDeleteUser(userId);
-        if (res && res.data) {
-            message.success('Xóa user thành công');
-            fetchUser();
-        }
-        else {
-            notification.error({
-                message: "có lỗi xảy ra",
-                description: res.message
-            });
-        }
-    };
-
     const renderHeader = () => {
         return (
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span>Table List Users</span>
+                <span>Table List Books</span>
                 <span style={{ display: 'flex', gap: 15 }}>
                     <Button
                         icon={<ExportOutlined />}
                         type="primary"
-                        onClick={() => handleExportData()}
+                    // onClick={() => handleExportData()}
                     >
                         Export
                     </Button>
                     <Button
-                        icon={<CloudDownloadOutlined />}
-                        type="primary"
-                        onClick={() => setOpenModalImport(true)}
-                    >
-                        Import
-                    </Button>
-                    <Button
                         icon={<PlusOutlined />}
                         type="primary"
-                        onClick={() => setOpenModalCreate(true)}
+                    // onClick={() => setOpenModalCreate(true)}
                     >
                         Thêm mới
                     </Button>
@@ -232,22 +170,26 @@ const UserTable = () => {
         setFilter(query);
     }
 
-    const handleExportData = () => {
-        // https://stackoverflow.com/questions/70871254/how-can-i-export-a-json-object-to-excel-using-nextjs-react
-        if (listUser.length > 0) {
-            const worksheet = XLSX.utils.json_to_sheet(listUser);
-            const workbook = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-            XLSX.writeFile(workbook, "ExportUser.xlsx");
+    const handleDeleteBook = async (bookId) => {
+        const res = await callDeleteBook(bookId);
+        if (res && res.data) {
+            message.success('Xóa book thành công');
+            fetchUser();
         }
-    }
+        else {
+            notification.error({
+                message: "có lỗi xảy ra",
+                description: res.message
+            });
+        }
+    };
 
     return (
         <>
             <div style={{ padding: 10 }}>
                 <Row gutter={[20, 20]}>
                     <Col span={24}>
-                        <InputSearch
+                        <InputSearchBook
                             handleSearch={handleSearch}
                             setFilter={setFilter}
                         />
@@ -257,7 +199,7 @@ const UserTable = () => {
                             title={renderHeader}
                             loading={isLoading}
                             columns={columns}
-                            dataSource={listUser}
+                            dataSource={listBook}
                             onChange={onChange}
                             rowKey='_id'
                             pagination={
@@ -272,31 +214,15 @@ const UserTable = () => {
                         />
                     </Col>
                 </Row>
-                <UserModalCreate
-                    openModalCreate={openModalCreate}
-                    setOpenModalCreate={setOpenModalCreate}
-                />
-                <UserViewDetail
+                <BookViewDetail
                     openViewDetail={openViewDetail}
                     setOpenViewDetail={setOpenViewDetail}
                     dataViewDetail={dataViewDetail}
                     setDataViewDetail={setDataViewDetail}
-                />
-                <UserImport
-                    openModalImport={openModalImport}
-                    setOpenModalImport={setOpenModalImport}
-                />
-                < UserModalUpdate
-                    openModalUpdate={openModalUpdate}
-                    setOpenModalUpdate={setOpenModalUpdate}
-                    dataUpdate={dataUpdate}
-                    setDataUpdate={setDataUpdate}
-                    fetchUser={fetchUser}
                 />
             </div>
         </>
     )
 }
 
-
-export default UserTable;
+export default BookTable;
