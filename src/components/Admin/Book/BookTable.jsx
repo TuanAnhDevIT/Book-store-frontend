@@ -5,6 +5,7 @@ import { parseISO, format } from 'date-fns';
 import { callFetchListBook } from '../../../services/api';
 import { DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined, ReloadOutlined } from '@ant-design/icons';
 import BookViewDetail from './BookViewDetail';
+import BookModalCreate from './BookModalCreate';
 
 const BookTable = () => {
     const [listBook, setListBook] = useState([]);
@@ -16,6 +17,8 @@ const BookTable = () => {
     const [total, setTotal] = useState(0);
     const [openViewDetail, setOpenViewDetail] = useState(false);
     const [dataViewDetail, setDataViewDetail] = useState(null);
+
+    const [openModalCreate, setOpenModalCreate] = useState(false)
 
 
 
@@ -148,7 +151,7 @@ const BookTable = () => {
                     <Button
                         icon={<PlusOutlined />}
                         type="primary"
-                    // onClick={() => setOpenModalCreate(true)}
+                        onClick={() => setOpenModalCreate(true)}
                     >
                         Thêm mới
                     </Button>
@@ -219,6 +222,10 @@ const BookTable = () => {
                     setOpenViewDetail={setOpenViewDetail}
                     dataViewDetail={dataViewDetail}
                     setDataViewDetail={setDataViewDetail}
+                />
+                <BookModalCreate
+                    openModalCreate={openModalCreate}
+                    setOpenModalCreate={setOpenModalCreate}
                 />
             </div>
         </>

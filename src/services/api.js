@@ -49,6 +49,14 @@ export const callDeleteBook = (bookId) => {
     return axios.delete(`api/v1/user/${bookId}`)
 }
 
+export const callCreateABook = (mainText, author, price, category, quantity, sold, thumbnail, slider) => {
+    return axios.post(`/api/v1/book`, { mainText, author, price, category, quantity, sold, thumbnail, slider })
+}
+
+export const callFetchCategory = (data) => {
+    return axios.get(`/api/v1/database/category`, data)
+}
+
 // export const callUpdateBook = (_id, fullName, phone) => {
 //     return axios.put('/api/v1/user', { _id, fullName, phone })
 // }
