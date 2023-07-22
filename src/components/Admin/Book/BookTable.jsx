@@ -13,8 +13,8 @@ import * as XLSX from 'xlsx';
 const BookTable = () => {
     const [listBook, setListBook] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [current, setCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(4);
+    const [current, setCurrent] = useState(1);//mặc định ở trang đầu
+    const [pageSize, setPageSize] = useState(4);//hiển thị 4 dòng trên 1 trang
     const [filter, setFilter] = useState("");
     const [sortQuery, setSortQuery] = useState("sort = -updatedAt");
     const [total, setTotal] = useState(0);

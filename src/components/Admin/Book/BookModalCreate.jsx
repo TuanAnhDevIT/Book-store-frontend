@@ -35,48 +35,6 @@ const BookModalCreate = (props) => {
         fetchCategory();
     }, [])
 
-    const onFinish = async (values) => {
-        // console.log(">>>Check values :", values);
-        // console.log(">>>Check data thumbnail :", thumbnail);
-        // console.log(">>>Check data slider :", slider);
-        // return;
-
-        if (dataThumbnail.length === 0) {
-            notification.error({
-                message: 'Lỗi validate',
-                description: 'Vui lòng upload ảnh thumbnail'
-            })
-            return;
-        }
-
-        if (dataSlider.length === 0) {
-            notification.error({
-                message: 'Lỗi validate',
-                description: 'Vui lòng upload ảnh slider'
-            })
-            return;
-        }
-
-        const { mainText, author, price, category, quantity, sold } = values;
-        const thumbnail = dataThumbnail[0].name;
-        const slider = dataSlider.map(item => item.name);
-        setIsSubmit(true)
-        const res = await callCreateABook(mainText, author, price, category, quantity, sold, thumbnail, slider);
-        if (res && res.data) {
-            message.success('Tạo mới book thành công');
-            form.resetFields();
-            setDataSlider([]);
-            setDataThumbnail([]);
-            setOpenModalCreate(false);
-            await props.fetchBook()
-        } else {
-            notification.error({
-                message: 'Đã có lỗi xảy ra',
-                description: res.message
-            })
-        }
-        setIsSubmit(false)
-    };
 
     const getBase64 = (img, callback) => {
         const reader = new FileReader();
@@ -155,6 +113,49 @@ const BookModalCreate = (props) => {
             setPreviewImage(url);
             setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
         });
+    };
+
+    const onFinish = async (values) => {
+        // console.log(">>>Check values :", values);
+        // console.log(">>>Check data thumbnail :", thumbnail);
+        // console.log(">>>Check data slider :", slider);
+        // return;
+
+        if (dataThumbnail.length === 0) {
+            notification.error({
+                message: 'Lỗi validate',
+                description: 'Vui lòng upload ảnh thumbnail'
+            })
+            return;
+        }
+
+        if (dataSlider.length === 0) {
+            notification.error({
+                message: 'Lỗi validate',
+                description: 'Vui lòng upload ảnh slider'
+            })
+            return;
+        }
+
+        const { mainText, author, price, category, quantity, sold } = values;
+        const thumbnail = dataThumbnail[0].name;
+        const slider = dataSlider.map(item => item.name);
+        setIsSubmit(true)
+        const res = await callCreateABook(mainText, author, price, category, quantity, sold, thumbnail, slider);
+        if (res && res.data) {
+            message.success('Tạo mới book thành công');
+            form.resetFields();
+            setDataSlider([]);
+            setDataThumbnail([]);
+            setOpenModalCreate(false);
+            await props.fetchBook()
+        } else {
+            notification.error({
+                message: 'Đã có lỗi xảy ra',
+                description: res.message
+            })
+        }
+        setIsSubmit(false)
     };
 
     return (
