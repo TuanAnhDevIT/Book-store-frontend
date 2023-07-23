@@ -82,7 +82,7 @@ export default function App() {
           element: <ContactPage />,
         },
         {
-          path: "book",
+          path: "book/:slug",//dấu : định nghĩa param, slug là tên biến có thể đặt bất kì
           element: <BookPage />,
         },
       ],

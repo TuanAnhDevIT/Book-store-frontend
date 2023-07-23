@@ -16,7 +16,7 @@ const BookTable = () => {
     const [current, setCurrent] = useState(1);//mặc định ở trang đầu
     const [pageSize, setPageSize] = useState(4);//hiển thị 4 dòng trên 1 trang
     const [filter, setFilter] = useState("");
-    const [sortQuery, setSortQuery] = useState("sort = -updatedAt");
+    const [sortQuery, setSortQuery] = useState("sort=-updatedAt");
     const [total, setTotal] = useState(0);
     const [openViewDetail, setOpenViewDetail] = useState(false);
     const [dataViewDetail, setDataViewDetail] = useState(null);
