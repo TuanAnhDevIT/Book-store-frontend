@@ -70,3 +70,7 @@ export const callUploadBookImg = (fileImg) => {
 export const callUpdateBook = (_id, thumbnail, slider, mainText, author, price, sold, quantity, category) => {
     return axios.put(`/api/v1/book/${_id}`, { _id, thumbnail, slider, mainText, author, price, sold, quantity, category })
 }
+
+export const callFetchBookById = (id) => {
+    return axios.get(`/api/v1/book/${id}`)
+}
