@@ -5,11 +5,12 @@ import ImageGallery from 'react-image-gallery';
 import { BsCartPlus } from 'react-icons/bs';
 import './book.scss';
 import ModalGallery from "./ModalGallery";
+import BookLoader from "./BookLoader";
 
 
 // https://www.npmjs.com/package/react-image-gallery
 
-const ViewDetail = () => {
+const ViewDetail = (props) => {
 
     const [isOpenModalGallery, setIsOpenModalGallery] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -90,7 +91,7 @@ const ViewDetail = () => {
         <div style={{ background: '#efefef', padding: "20px 0" }}>
             <div className='view-detail-book' style={{ maxWidth: 1440, margin: '0 auto', minHeight: "calc(100vh - 150px)" }}>
                 <div style={{ padding: "20px", background: '#fff', borderRadius: 5 }}>
-                    <Row gutter={[20, 20]}>
+                    {/* <Row gutter={[20, 20]}>
                         <Col md={10} sm={0} xs={0}>
                             <ImageGallery
                                 ref={refGallery}
@@ -131,13 +132,13 @@ const ViewDetail = () => {
                                 </div>
                                 <div className='delivery'>
                                     <div>
-                                        <span className='left'>Vận chuyển</span>
-                                        <span className='right'>Miễn phí vận chuyển</span>
+                                        <span className='left-side'>Vận chuyển</span>
+                                        <span className='right-side'>Miễn phí vận chuyển</span>
                                     </div>
                                 </div>
                                 <div className='quantity'>
-                                    <span className='left'>Số lượng</span>
-                                    <span className='right'>
+                                    <span className='left-side'>Số lượng</span>
+                                    <span className='right-side'>
                                         <button ><MinusOutlined /></button>
                                         <input defaultValue={1} />
                                         <button><PlusOutlined /></button>
@@ -152,7 +153,8 @@ const ViewDetail = () => {
                                 </div>
                             </Col>
                         </Col>
-                    </Row>
+                    </Row> */}
+                    <BookLoader />
                 </div>
             </div>
             <ModalGallery
