@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import counterReducer from '../redux/counter/counterSlice';
 import accountReducer from '../redux/account/accountSlice';
+import orderReducer from '../redux/order/orderSlice';
 
 // https://redux-toolkit.js.org/usage/usage-guide#use-with-redux-persist
 import {
@@ -25,7 +26,8 @@ const persistConfig = {
 //tra google: redux toolkit rootReducer
 const rootReducer = combineReducers({
   counter: counterReducer,
-  account: accountReducer
+  account: accountReducer,
+  order: orderReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
