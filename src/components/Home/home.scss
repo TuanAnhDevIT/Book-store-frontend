@@ -20,6 +20,9 @@
                 padding: .3rem;
                 height: 100%;
                 box-sizing: border-box;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
 
                 .text {
                     padding: 0.5rem 0;

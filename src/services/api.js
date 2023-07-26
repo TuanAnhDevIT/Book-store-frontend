@@ -49,8 +49,8 @@ export const callDeleteBook = (bookId) => {
     return axios.delete(`api/v1/book/${bookId}`)
 }
 
-export const callCreateABook = (thumbnail, slider, mainText, author, price, sold, quantity, category) => {
-    return axios.post('/api/v1/book', { thumbnail, slider, mainText, author, price, sold, quantity, category })
+export const callCreateABook = (mainText, author, price, category, quantity, sold, thumbnail, slider) => {
+    return axios.post('/api/v1/book', { mainText, author, price, category, quantity, sold, thumbnail, slider })
 }
 
 export const callFetchCategory = (data) => {

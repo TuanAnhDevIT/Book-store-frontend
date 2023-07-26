@@ -172,7 +172,7 @@ const Home = () => {
             <div className="homepage-container" style={{ maxWidth: 1440, margin: '0 auto' }}>
                 <Row gutter={[20, 20]}>
                     <Col md={4} sm={0} xs={0} >
-                        <div style={{ padding: "20px", background: '#fff', borderRadius: '5' }}>
+                        <div style={{ padding: "20px", background: '#fff', borderRadius: "5px" }}>
                             <div style={{ display: 'flex', justifyContent: "space-between" }}>
                                 <span> <FilterTwoTone />
                                     <span style={{ fontWeight: 500, paddingLeft: "5px" }}>Bộ lọc tìm kiếm</span>
@@ -267,7 +267,7 @@ const Home = () => {
                     </Col>
                     <Col md={20} xs={24} >
                         <Spin spinning={isLoading} tip="Loading ...">
-                            <div style={{ padding: "20px", background: '#fff', borderRadius: '5' }}>
+                            <div style={{ padding: "20px", background: '#fff', borderRadius: "5px" }}>
                                 <Row>
                                     <Tabs
                                         defaultActiveKey="sort=-sold"
@@ -283,18 +283,23 @@ const Home = () => {
                                                 onClick={() => handleRedirectBook(item)}
                                             >
                                                 <div className='wrapper'>
-                                                    <div className='thumbnail'>
-                                                        <img src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${item.thumbnail}`} />
+                                                    <div className='wrapper-top'>
+                                                        <div className='thumbnail'>
+                                                            <img src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${item.thumbnail}`} />
+                                                        </div>
+                                                        <div className='text' title={item.mainText}>
+                                                            {item.mainText}
+                                                        </div>
+
                                                     </div>
-                                                    <div className='text' title={item.mainText}>
-                                                        {item.mainText}
-                                                    </div>
-                                                    <div className='price'>
-                                                        {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(70000)}
-                                                    </div>
-                                                    <div className='rating'>
-                                                        <Rate value={5} disabled style={{ color: '#ffce3d', fontSize: 10 }} />
-                                                        <span>Đã bán {item.sold}</span>
+                                                    <div className='wrapper-bottom'>
+                                                        <div className='price'>
+                                                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item?.price ?? 0)}
+                                                        </div>
+                                                        <div className='rating'>
+                                                            <Rate value={5} disabled style={{ color: '#ffce3d', fontSize: 10 }} />
+                                                            <span>Đã bán {item.sold}</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
