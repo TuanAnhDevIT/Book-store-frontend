@@ -147,7 +147,7 @@ const ViewDetail = (props) => {
                                         showThumbnails={false}
                                     />
                                 </Col>
-                                <Col span={24}>
+                                <Col span={24} style={{ padding: 30 }}>
                                     <div className='author'>Tác giả: <a href='#'>{dataBook?.author}</a> </div>
                                     <div className='title'>{dataBook?.mainText}</div>
                                     <div className='rating'>

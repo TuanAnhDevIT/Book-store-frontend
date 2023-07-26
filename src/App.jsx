@@ -21,6 +21,7 @@ import AdminPage from "./pages/admin";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LayoutAdmin from './components/Admin/LayoutAdmin';
 import './styles/reset.scss';
+import './styles/global.scss';
 import UserTable from "./components/Admin/User/UserTable";
 import BookTable from "./components/Admin/Book/BookTable";
 
