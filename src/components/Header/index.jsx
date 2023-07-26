@@ -53,6 +53,10 @@ const Header = () => {
 
     const urlAvatar = `${import.meta.env.VITE_BACKEND_URL}/images/avatar/${user?.avatar}`;
 
+    const handleViewCart = () => {
+        navigate('/book')
+    }
+
     const contentPopover = () => {
         return (
             <div className='pop-cart-body'>
@@ -80,7 +84,7 @@ const Header = () => {
                     })}
                 </div>
                 <div className='pop-cart-footer'>
-                    <button>Xem giỏ hàng</button>
+                    <button onClick={handleViewCart} style={{ cursor: "pointer" }}>Xem giỏ hàng</button>
                 </div>
             </div>
         )
