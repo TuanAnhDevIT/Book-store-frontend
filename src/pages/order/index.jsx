@@ -3,10 +3,15 @@ import { useState } from "react"
 import VIewOrder from "../../components/Order/ViewOrder";
 import { SmileOutlined } from "@ant-design/icons";
 import Payment from "../../components/Order/Payment";
+import { useNavigate } from "react-router";
 
 
 const OrderPage = (props) => {
     const [currentStep, setCurrentStep] = useState(0);
+    const navigate = useNavigate();
+    const handleViewHistory = () => {
+        navigate('/history')
+    }
 
     return (
         <div style={{ background: "#efefef", padding: "20px 0" }}>
@@ -39,7 +44,7 @@ const OrderPage = (props) => {
                     <Result
                         icon={<SmileOutlined />}
                         title="Đơn hàng đã được đặt thành công!"
-                        extra={<Button type="primary">Xem lịch sử</Button>}
+                        extra={<Button type="primary" onClick={handleViewHistory}>Xem lịch sử</Button>}
                     />
                 }
             </div>

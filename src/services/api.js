@@ -80,3 +80,8 @@ export const callPlaceOrder = (data) => {
         ...data
     })
 }
+
+/////////////
+export const callHistory = () => {
+    return axios.get('/api/v1/history')
+}

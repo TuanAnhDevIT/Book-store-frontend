@@ -8,11 +8,14 @@ import ModalGallery from "./ModalGallery";
 import BookLoader from "./BookLoader";
 import { doAddBookAction } from "../../redux/order/orderSlice";
 import { useDispatch } from "react-redux";
+import { useNavigate } from 'react-router';
 
 
 // https://www.npmjs.com/package/react-image-gallery
 
 const ViewDetail = (props) => {
+    const navigate = useNavigate();
+
     const { dataBook } = props;
 
     const [isOpenModalGallery, setIsOpenModalGallery] = useState(false);
@@ -117,6 +120,10 @@ const ViewDetail = (props) => {
         dispatch(doAddBookAction({ quantity, detail: book, _id: book._id }))
     };
 
+    const handleBuyNow = (quantity, book) => {
+        dispatch(doAddBookAction({ quantity, detail: book, _id: book._id }))
+        navigate('/book')
+    };
     return (
         <div style={{ background: '#efefef', padding: "20px 0" }}>
             <div className='view-detail-book' style={{ maxWidth: 1440, margin: '0 auto', minHeight: "calc(100vh - 150px)" }}>
@@ -180,7 +187,7 @@ const ViewDetail = (props) => {
                                             <BsCartPlus className='icon-cart' />
                                             <span>Thêm vào giỏ hàng</span>
                                         </button>
-                                        <button className='now'>Mua ngay</button>
+                                        <button className='now' onClick={() => handleBuyNow(currentQuantity, dataBook)}>Mua ngay</button>
                                     </div>
                                 </Col>
                             </Col>

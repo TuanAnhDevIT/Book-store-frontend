@@ -25,6 +25,7 @@ import './styles/global.scss';
 import UserTable from "./components/Admin/User/UserTable";
 import BookTable from "./components/Admin/Book/BookTable";
 import OrderPage from "./pages/order";
+import OrderHistory from "./pages/orderHistory";
 
 
 const Layout = () => {
@@ -90,6 +91,10 @@ export default function App() {
         {
           path: "book",
           element: <OrderPage />,
+        },
+        {
+          path: "history",
+          element: <OrderHistory />
         }
       ],
     },
