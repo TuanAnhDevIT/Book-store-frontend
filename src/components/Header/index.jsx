@@ -57,6 +57,10 @@ const Header = () => {
         navigate('/book')
     }
 
+    const handleBackHome = () => {
+        navigate('/')
+    }
+
     const contentPopover = () => {
         return (
             <div className='pop-cart-body'>
@@ -98,7 +102,7 @@ const Header = () => {
                             setOpenDrawer(true)
                         }}>☰</div>
                         <div className='page-header__logo'>
-                            <span className='logo'>
+                            <span className='logo' onClick={() => handleBackHome()}>
                                 <FaReact className='rotate icon-react' /> TuanAnh DEV
                                 <VscSearchFuzzy className='icon-search' />
                             </span>

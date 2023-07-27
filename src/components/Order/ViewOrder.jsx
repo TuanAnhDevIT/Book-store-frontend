@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { doDeleteItemCartAction, doUpdateCartAction } from "../../redux/order/orderSlice";
-import { Col, Divider, InputNumber, Row } from "antd";
+import { Col, Divider, Empty, InputNumber, Row } from "antd";
 import { DeleteTwoTone } from "@ant-design/icons";
-import './ViewOrder.scss'
+import "../../styles/global.scss"
 
 const VIewOrder = (props) => {
     const carts = useSelector(state => state.order.carts);
@@ -49,6 +49,7 @@ const VIewOrder = (props) => {
                                     </div>
                                     <div className="action">
                                         <div className="quantity">
+                                            <span style={{ paddingRight: "10px" }}>Số lượng: </span>
                                             <InputNumber onChange={(value) => handleOnchangeInput(value, book)} value={book.quantity} />
                                         </div>
                                         <div className="sum">
@@ -63,6 +64,14 @@ const VIewOrder = (props) => {
                                 </div>
                             )
                         })}
+                        {carts.length === 0 &&
+                            <div className="order-book-empty">
+                                <Empty
+                                    description={"Không có sản phẩm trong giỏ hàng"}
+                                />
+
+                            </div>
+                        }
                     </Col>
                     <Col md={6} xs={24}>
                         <div className="order-sum">
@@ -80,7 +89,10 @@ const VIewOrder = (props) => {
                                 </span>
                             </div>
                             <Divider style={{ margin: "10px 0" }} />
-                            <button>Mua Hàng ({carts?.length ?? 0})</button>
+                            <button
+                                disabled={carts.length === 0}
+                                onClick={() => props.setCurrentStep(1)}
+                            >Mua Hàng ({carts?.length ?? 0})</button>
                         </div>
                     </Col>
                 </Row>

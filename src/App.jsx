@@ -24,7 +24,7 @@ import './styles/reset.scss';
 import './styles/global.scss';
 import UserTable from "./components/Admin/User/UserTable";
 import BookTable from "./components/Admin/Book/BookTable";
-import VIewOrder from "./components/Order/ViewOrder";
+import OrderPage from "./pages/order";
 
 
 const Layout = () => {
@@ -89,7 +89,7 @@ export default function App() {
         },
         {
           path: "book",
-          element: <VIewOrder />,
+          element: <OrderPage />,
         }
       ],
     },

@@ -1,93 +1,93 @@
-/* ViewOrder.css */
+// /* ViewOrder.css */
 
-/* Add your CSS styles here */
-.order-container {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+// /* Add your CSS styles here */
+// .order-container {
+//     background-color: #ffffff;
+//     padding: 20px;
+//     border-radius: 5px;
+//     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+// }
 
-.order-book {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #ccc;
-    padding: 10px 0;
-}
+// .order-book {
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     border-bottom: 1px solid #ccc;
+//     padding: 10px 0;
+// }
 
-.book-content {
-    display: flex;
-    align-items: center;
-}
+// .book-content {
+//     display: flex;
+//     align-items: center;
+// }
 
-.book-content img {
-    max-width: 80px;
-    height: auto;
-    margin-right: 10px;
-}
+// .book-content img {
+//     max-width: 80px;
+//     height: auto;
+//     margin-right: 10px;
+// }
 
-.title {
-    font-size: 16px;
-    font-weight: bold;
-}
+// .title {
+//     font-size: 16px;
+//     font-weight: bold;
+// }
 
-.price {
-    font-size: 14px;
-    padding-left: 20px;
-}
+// .price {
+//     font-size: 14px;
+//     padding-left: 20px;
+// }
 
-.action {
-    display: flex;
-    align-items: center;
-}
+// .action {
+//     display: flex;
+//     align-items: center;
+// }
 
-.quantity {
-    margin-right: 10px;
-}
+// .quantity {
+//     margin-right: 10px;
+// }
 
-.sum {
-    font-size: 14px;
-}
+// .sum {
+//     font-size: 14px;
+// }
 
-.order-sum {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
+// .order-sum {
+//     background-color: #f9f9f9;
+//     padding: 20px;
+//     border-radius: 5px;
+//     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+// }
 
-.calculate {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-}
+// .calculate {
+//     display: flex;
+//     justify-content: space-between;
+//     margin-bottom: 10px;
+// }
 
-.calculate span {
-    font-size: 16px;
-}
+// .calculate span {
+//     font-size: 16px;
+// }
 
-.calculate .sum-final {
-    font-weight: bold;
-    color: #eb2f96;
-}
+// .calculate .sum-final {
+//     font-weight: bold;
+//     color: #eb2f96;
+// }
 
-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #ee4d2d;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
+// button {
+//     display: block;
+//     width: 100%;
+//     padding: 10px;
+//     background-color: #ee4d2d;
+//     color: #ffffff;
+//     border: none;
+//     border-radius: 5px;
+//     cursor: pointer;
+//     font-size: 16px;
+// }
 
-button:hover {
-    background-color: #ee2d2d;
-}
+// button:hover {
+//     background-color: #ee2d2d;
+// }
 
-button:focus {
-    outline: none;
-}
+// button:focus {
+//     outline: none;
+// }
