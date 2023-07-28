@@ -11,9 +11,13 @@ import { callLogout } from '../../services/api';
 import './header.scss';
 import { doLogoutAction } from '../../redux/account/accountSlice';
 import { Link } from 'react-router-dom';
+import ManageAccount from '../Account/ManageAccount';
 
 const Header = () => {
     const [openDrawer, setOpenDrawer] = useState(false);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     const isAuthenticated = useSelector(state => state.account.isAuthenticated);
     const user = useSelector(state => state.account.user);
     const navigate = useNavigate();
@@ -31,8 +35,16 @@ const Header = () => {
     }
 
     let items = [
+        // {
+        //     label: <label style={{ cursor: 'pointer' }}>Quản lý tài khoản</label>,
+        //     key: 'account',
+        // },
         {
-            label: <label style={{ cursor: 'pointer' }}>Quản lý tài khoản</label>,
+            label: (
+                <div style={{ cursor: 'pointer' }} onClick={() => setIsModalOpen(true)}>
+                    Quản lý tài khoản
+                </div>
+            ),
             key: 'account',
         },
         {
@@ -157,18 +169,7 @@ const Header = () => {
                     </nav>
                 </header>
             </div>
-            {/* <Drawer
-                title="Menu chức năng"
-                placement="left"
-                onClose={() => setOpenDrawer(false)}
-                open={openDrawer}
-            >
-                <p>Quản lý tài khoản</p>
-                <Divider />
-
-                <p>Đăng xuất</p>
-                <Divider />
-            </Drawer> */}
+            <ManageAccount isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />;
         </>
     )
 };

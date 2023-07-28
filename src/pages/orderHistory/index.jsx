@@ -54,20 +54,34 @@ const OrderHistory = () => {
                 <Tag color="green">Thành công</Tag>
             ),
         },
+        // {
+        //     title: 'Chi tiết đơn mua',
+        //     render: (text, record) => (
+        //         // Convert the detail array to the desired output format
+        //         <ReactJson
+        //             src={record.detail.map((detailItem, index) => ({
+        //                 [index]: detailItem,
+        //             }))}
+        //             collapsed={1}
+        //             theme="rjv-default"
+        //             name="Chi tiết đơn mua" // Set the name to "Chi tiết đơn mua"
+        //         />
+        //     ),
+        // },
         {
-            title: 'Chi tiết đơn mua',
-            render: (text, record) => (
-                // Convert the detail array to the desired output format
+            title: 'Chi tiết',
+            key: 'action',
+            render: (_, record) => (
                 <ReactJson
-                    src={record.detail.map((detailItem, index) => ({
-                        [index]: detailItem,
-                    }))}
-                    collapsed={1}
-                    theme="rjv-default"
-                    name="Chi tiết đơn mua" // Set the name to "Chi tiết đơn mua"
+                    src={record.detail}
+                    name="Chi tiết đơn mua"
+                    collapsed={true}
+                    enableClipboard={false}
+                    displayDataTypes={false}
+                    displayObjectSize={false}
                 />
-            ),
-        },
+            )
+        }
     ];
     return (
         <>

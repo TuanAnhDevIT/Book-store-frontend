@@ -94,9 +94,6 @@ const BookTable = () => {
             title: 'Action',
             width: 100,
             render: (text, record, index) => {
-                // return (
-                //     <><button>Delete</button></>
-                // )
                 return (
                     <div style={{ display: "flex", justifyContent: "space-around" }}>
                         <Popconfirm

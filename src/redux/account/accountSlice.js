@@ -10,7 +10,7 @@ const initialState = {
         "role": "",
         "avatar": "",
         "id": ""
-    }
+    },
 };
 
 
@@ -50,6 +50,14 @@ export const accountSlice = createSlice({
                 id: ""
             }
         },
+        doUpdateUserInfoAction: (state, action) => {
+            state.user.avatar = action.payload.avatar;
+            state.user.phone = action.payload.phone;
+            state.user.fullName = action.payload.fullName;
+        },
+        doUploadAvatarAction: (state, action) => {
+            state.tempAvatar = action.payload.avatar
+        }
 
     },
     // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -59,7 +67,7 @@ export const accountSlice = createSlice({
     },
 });
 
-export const { doLoginAction, doGetAccountAction, doLogoutAction } = accountSlice.actions;
+export const { doLoginAction, doGetAccountAction, doLogoutAction, doUpdateUserInfoAction, doUploadAvatarAction } = accountSlice.actions;
 
 
 export default accountSlice.reducer;
