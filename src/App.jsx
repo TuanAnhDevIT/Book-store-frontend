@@ -11,7 +11,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './components/Home';
 import RegisterPage from './pages/register';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { callFetchAccount } from "./services/api";
 import { useDispatch, useSelector } from "react-redux";
 import { doGetAccountAction } from "./redux/account/accountSlice";
@@ -26,13 +26,15 @@ import UserTable from "./components/Admin/User/UserTable";
 import BookTable from "./components/Admin/Book/BookTable";
 import OrderPage from "./pages/order";
 import OrderHistory from "./pages/orderHistory";
+import ManageOrder from "./components/Admin/ManageOrder/ManageOrder";
 
 
 const Layout = () => {
+  const [searchTerm, setSearchTerm] = useState("");
   return (
     <div className='layout-app'>
-      <Header />
-      <Outlet />
+      <Header searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <Outlet context={[searchTerm, setSearchTerm]} />
       <Footer />
     </div>
   )
@@ -89,12 +91,18 @@ export default function App() {
           element: <BookPage />,
         },
         {
-          path: "book",
-          element: <OrderPage />,
+          path: "order",
+          element:
+            <ProtectedRoute>
+              <OrderPage />
+            </ProtectedRoute>
         },
         {
           path: "history",
-          element: <OrderHistory />
+          element:
+            <ProtectedRoute>
+              <OrderHistory />
+            </ProtectedRoute>
         }
       ],
     },
@@ -117,6 +125,10 @@ export default function App() {
         {
           path: "book",
           element: <BookTable />,
+        },
+        {
+          path: "manage-order",
+          element: <ManageOrder />,
         },
       ],
     },

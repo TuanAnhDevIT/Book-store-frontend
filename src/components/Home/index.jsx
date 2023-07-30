@@ -1,10 +1,11 @@
 import { FilterTwoTone, ReloadOutlined } from '@ant-design/icons';
-import { Row, Col, Form, Checkbox, Divider, InputNumber, Button, Rate, Tabs, Pagination, Spin } from 'antd';
+import { Row, Col, Form, Checkbox, Divider, InputNumber, Button, Rate, Tabs, Pagination, Spin, Breadcrumb } from 'antd';
 import './home.scss';
 import { callFetchCategory, callFetchListBook } from '../../services/api';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 const Home = () => {
+    const [searchTerm, setSearchTerm] = useOutletContext();
 
     const [listCategory, setListCategory] = useState([]);
     const [listBook, setListBook] = useState([]);
@@ -34,16 +35,20 @@ const Home = () => {
 
     useEffect(() => {
         fetchBook();
-    }, [current, pageSize, filter, sortQuery]);
+    }, [current, pageSize, filter, sortQuery, searchTerm]);
 
     const fetchBook = async () => {
         setIsLoading(true)
         let query = `current=${current}&pageSize=${pageSize}`;
         if (filter) {
-            query += `&${filter}`
+            query += `&${filter}`;
         }
         if (sortQuery) {
-            query += `&${sortQuery}`
+            query += `&${sortQuery}`;
+        }
+
+        if (searchTerm) {
+            query += `&mainText=/${searchTerm}/i`;
         }
 
         const res = await callFetchListBook(query);
@@ -170,6 +175,9 @@ const Home = () => {
     return (
         <div style={{ background: '#efefef', padding: "20px 0" }}>
             <div className="homepage-container" style={{ maxWidth: 1440, margin: '0 auto' }}>
+                {/* <Breadcrumb
+
+                /> */}
                 <Row gutter={[20, 20]}>
                     <Col md={4} sm={0} xs={0} >
                         <div style={{ padding: "20px", background: '#fff', borderRadius: "5px" }}>
@@ -177,7 +185,12 @@ const Home = () => {
                                 <span> <FilterTwoTone />
                                     <span style={{ fontWeight: 500, paddingLeft: "5px" }}>Bộ lọc tìm kiếm</span>
                                 </span>
-                                <ReloadOutlined title="Reset" onClick={() => form.resetFields()} />
+                                <ReloadOutlined title="Reset" onClick={() => {
+                                    form.resetFields();
+                                    setFilter('');
+                                    setSearchTerm('');
+                                }} />
+
                             </div>
                             <Divider />
                             <Form

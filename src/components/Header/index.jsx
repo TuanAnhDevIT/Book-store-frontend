@@ -13,7 +13,8 @@ import { doLogoutAction } from '../../redux/account/accountSlice';
 import { Link } from 'react-router-dom';
 import ManageAccount from '../Account/ManageAccount';
 
-const Header = () => {
+const Header = ({ setSearchTerm }) => {
+
     const [openDrawer, setOpenDrawer] = useState(false);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,6 +25,11 @@ const Header = () => {
     const dispatch = useDispatch();
 
     const carts = useSelector(state => state.order.carts);// order: gọi tới orderReducer trong store.js
+
+    const handleSearch = (event) => {
+        setSearchTerm(event.target.value); // Gửi giá trị tìm kiếm lên component Home
+    };
+
 
     const handleLogout = async () => {
         const res = await callLogout();
@@ -70,7 +76,7 @@ const Header = () => {
     const urlAvatar = `${import.meta.env.VITE_BACKEND_URL}/images/avatar/${user?.avatar}`;
 
     const handleViewCart = () => {
-        navigate('/book')
+        navigate('/order')
     }
 
     const handleBackHome = () => {
@@ -122,9 +128,15 @@ const Header = () => {
                                 <FaReact className='rotate icon-react' /> TuanAnh DEV
                                 <VscSearchFuzzy className='icon-search' />
                             </span>
-                            <input
+                            {/* <input
                                 className="input-search" type={'text'}
                                 placeholder="Bạn tìm gì hôm nay"
+                            /> */}
+                            <input
+                                className='input-search'
+                                type='text'
+                                placeholder='Bạn tìm gì hôm nay'
+                                onChange={handleSearch} // Khi người dùng nhập vào ô tìm kiếm, gọi hàm handleSearch
                             />
                         </div>
 
@@ -169,7 +181,7 @@ const Header = () => {
                     </nav>
                 </header>
             </div>
-            <ManageAccount isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />;
+            <ManageAccount isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
         </>
     )
 };

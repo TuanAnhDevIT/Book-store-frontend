@@ -113,3 +113,12 @@ export const callUpdatePassword = (email, oldpass, newpass) => {
         email, oldpass, newpass
     })
 }
+//////
+export const callFetchDashboard = () => {
+    return axios.get('/api/v1/database/dashboard')
+}
+
+/////
+export const callFetchListOrder = (query) => {
+    return axios.get(`/api/v1/order?${query}`)
+}

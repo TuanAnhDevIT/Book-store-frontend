@@ -230,6 +230,9 @@ const UserTable = () => {
 
     const handleSearch = (query) => {
         setFilter(query);
+        setCurrent(1)
+        // có 1 bug là khi tại trang 2 => search email=admin thì không tìm thấy 
+        //=> setCurent(1) để hàm useEfect nhận ra sự thay đổi và gọi lại hàm fetchUser
     }
 
     const handleExportData = () => {

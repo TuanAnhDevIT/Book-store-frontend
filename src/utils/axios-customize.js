@@ -1,4 +1,7 @@
+import { Mutex } from "async-mutex";
 import axios from "axios";
+
+const mutex = new Mutex();
 
 // lấy url gốc từ biến môi trường vite
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
@@ -16,13 +19,23 @@ instance.defaults.headers.common = { 'Authorization': `Bearer ${localStorage.get
 //Định nghĩa hàm handleRefreshToken để gửi yêu cầu refresh token lên server 
 //và trả về access token mới.
 const handleRefreshToken = async () => {
-    const res = await instance.get('/api/v1/auth/refresh');
-    if (res && res.data) return res.data.access_token;
-    else null;
+    // const res = await instance.get('/api/v1/auth/refresh');
+    // if (res && res.data) return res.data.access_token;
+    // else null;
+
+    return await mutex.runExclusive(async () => {
+        const res = await instance.get('/api/v1/auth/refresh');
+        if (res && res.data) return res.data.access_token;
+        else null;
+    })
 }
 
 // Thêm interceptor cho request
 instance.interceptors.request.use(function (config) {
+    if (typeof window !== "undefined" && window && window.localStorage &&
+        window.localStorage.getItem('access_token')) {
+        config.headers.Authorization = 'Bearer ' + window.localStorage.getItem('access_token');
+    }
     // Thực hiện một số thay đổi trước khi gửi request
     return config;
 }, function (error) {
@@ -61,8 +74,14 @@ instance.interceptors.response.use(function (response) {
         && +error.response.status === 400
         && error.config.url === '/api/v1/auth/refresh'
     ) {
-        // Chuyển hướng đến trang đăng nhập
-        window.location.href = '/login';
+        if (
+            window.location.pathname !== '/'
+            && !window.location.pathname.startsWith('/book')
+        ) {
+
+            // Chuyển hướng đến trang đăng nhập
+            window.location.href = '/login';
+        }
     }
     // Trả về dữ liệu lỗi hoặc reject promise
     return error?.response?.data ?? Promise.reject(error);

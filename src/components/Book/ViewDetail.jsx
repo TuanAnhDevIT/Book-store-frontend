@@ -122,7 +122,7 @@ const ViewDetail = (props) => {
 
     const handleBuyNow = (quantity, book) => {
         dispatch(doAddBookAction({ quantity, detail: book, _id: book._id }))
-        navigate('/book')
+        navigate('/order')
     };
     return (
         <div style={{ background: '#efefef', padding: "20px 0" }}>

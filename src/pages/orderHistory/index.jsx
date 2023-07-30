@@ -54,20 +54,6 @@ const OrderHistory = () => {
                 <Tag color="green">Thành công</Tag>
             ),
         },
-        // {
-        //     title: 'Chi tiết đơn mua',
-        //     render: (text, record) => (
-        //         // Convert the detail array to the desired output format
-        //         <ReactJson
-        //             src={record.detail.map((detailItem, index) => ({
-        //                 [index]: detailItem,
-        //             }))}
-        //             collapsed={1}
-        //             theme="rjv-default"
-        //             name="Chi tiết đơn mua" // Set the name to "Chi tiết đơn mua"
-        //         />
-        //     ),
-        // },
         {
             title: 'Chi tiết',
             key: 'action',

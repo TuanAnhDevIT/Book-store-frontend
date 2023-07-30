@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     AppstoreOutlined,
     ExceptionOutlined,
@@ -16,6 +16,7 @@ import './layout.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { callLogout } from '../../services/api';
 import { doLogoutAction } from '../../redux/account/accountSlice';
+import ManageAccount from '../Account/ManageAccount';
 
 const { Content, Footer, Sider } = Layout;
 
@@ -35,11 +36,11 @@ const items = [
                 key: 'crud',
                 icon: <TeamOutlined />,
             },
-            {
-                label: 'Files1',
-                key: 'file1',
-                icon: <TeamOutlined />,
-            }
+            // {
+            //     label: 'Files1',
+            //     key: 'file1',
+            //     icon: <TeamOutlined />,
+            // }
         ]
     },
     {
@@ -48,7 +49,7 @@ const items = [
         icon: <ExceptionOutlined />
     },
     {
-        label: <Link to='/admin/order'>Manage Orders</Link>,
+        label: <Link to='/admin/manage-order'>Manage Orders</Link>,
         key: 'order',
         icon: <DollarCircleOutlined />
     },
@@ -59,6 +60,18 @@ const LayoutAdmin = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [activeMenu, setActiveMenu] = useState('dashboard');
     const user = useSelector(state => state.account.user);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        if (window.location.pathname.includes('/book')) {
+            setActiveMenu('book')
+        } else if (window.location.pathname.includes('/user')) {
+            setActiveMenu('crud')
+        } else if (window.location.pathname.includes('/manage-order')) {
+            setActiveMenu('order')
+        }
+    }, [])
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -75,12 +88,20 @@ const LayoutAdmin = () => {
 
     const itemsDropdown = [
         {
-            label: <label style={{ cursor: 'pointer' }}>Quản lý tài khoản</label>,
+            label: (
+                <div style={{ cursor: 'pointer' }} onClick={() => setIsModalOpen(true)}>
+                    Quản lý tài khoản
+                </div>
+            ),
             key: 'account',
         },
         {
             label: <Link to='/'>Trang chủ</Link>,
             key: 'admin'
+        },
+        {
+            label: <Link to='/history'>Lịch sử mua hàng</Link>,
+            key: 'history',
         },
         {
             label: <label
@@ -109,7 +130,8 @@ const LayoutAdmin = () => {
                     Admin
                 </div>
                 <Menu
-                    defaultSelectedKeys={[activeMenu]}
+                    // defaultSelectedKeys={[activeMenu]}
+                    selectedKeys={[activeMenu]}
                     mode="inline"
                     items={items}
                     onClick={(e) => setActiveMenu(e.key)}
@@ -139,6 +161,8 @@ const LayoutAdmin = () => {
                     React Test Fresher &copy; TuanAnh DEVIT - Made with <HeartTwoTone />
                 </Footer>
             </Layout>
+            <ManageAccount isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+
         </Layout>
     );
 };
